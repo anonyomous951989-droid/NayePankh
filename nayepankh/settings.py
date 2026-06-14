@@ -70,15 +70,19 @@ INSTALLED_APPS = [
 # reach views or after views return responses.
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',        # Security enhancements
+    "whitenoise.middleware.WhiteNoiseMiddleware",        # Static file compression & caching
     'django.contrib.sessions.middleware.SessionMiddleware',  # Session support
     'django.middleware.common.CommonMiddleware',             # Common utilities
     'django.middleware.csrf.CsrfViewMiddleware',            # CSRF protection
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Auth support
     'django.contrib.messages.middleware.MessageMiddleware',  # Flash messages
     'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Clickjacking protection
-    "whitenoise.middleware.WhiteNoiseMiddleware",        # Static file compression & caching
+    
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://raj-nayepankh.onrender.com",
+]
 # ==============================================================
 # URL CONFIGURATION
 # ==============================================================
