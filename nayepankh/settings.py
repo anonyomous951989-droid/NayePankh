@@ -76,6 +76,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Auth support
     'django.contrib.messages.middleware.MessageMiddleware',  # Flash messages
     'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Clickjacking protection
+    "whitenoise.middleware.WhiteNoiseMiddleware",        # Static file compression & caching
 ]
 
 # ==============================================================
@@ -171,6 +172,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Directory where collectstatic will copy all static files (for production)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ==============================================================
 # MEDIA FILES (User-uploaded files: resumes, photos, etc.)
