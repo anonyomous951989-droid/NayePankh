@@ -1,0 +1,428 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<!-- ============================================================== -->
+<!-- HERO SECTION -->
+<!-- ============================================================== -->
+<section class="hero-section" id="hero">
+    <!-- Floating decorative elements -->
+    <div class="hero-float-1"></div>
+    <div class="hero-float-2"></div>
+    <div class="hero-float-3"></div>
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                        <span>Youth-Led NGO | Making a Difference</span>
+                    </div>
+
+                    <h1 class="hero-title">
+                        Empower Lives,<br>
+                        <span class="highlight">Volunteer Today</span>
+                        with NayePankh
+                    </h1>
+
+                    <p class="hero-description">
+                        Join NayePankh Foundation and be part of a movement that transforms
+                        communities. Your skills and time can create lasting impact in
+                        education, healthcare, and social empowerment.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <a href="{% url 'accounts:signup' %}" class="btn btn-hero-primary">
+                            <i class="bi bi-person-plus-fill"></i>
+                            Become a Volunteer
+                        </a>
+                        <a href="#about" class="btn btn-hero-secondary">
+                            <i class="bi bi-play-circle"></i>
+                            Learn More
+                        </a>
+                    </div>
+
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="stat-number stat-counter" data-target="{{ stats.total_volunteers }}">0+</span>
+                            <span class="stat-label">Volunteers</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="stat-number stat-counter" data-target="{{ stats.total_events }}">0+</span>
+                            <span class="stat-label">Events</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="stat-number stat-counter" data-target="{{ stats.cities }}">0+</span>
+                            <span class="stat-label">Cities</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 d-none d-lg-block">
+                <div class="hero-image-wrapper">
+                    <div class="hero-visual">
+                        <div class="visual-content">
+                            <i class="bi bi-heart-pulse-fill visual-icon"></i>
+                            <h3>NayePankh Foundation</h3>
+                            <p>Giving Wings to Dreams Since Day One</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- ABOUT US SECTION -->
+<!-- ============================================================== -->
+<section class="section-padding" id="about">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label">
+                <i class="bi bi-people-fill"></i> About Us
+            </span>
+            <h2 class="section-title">
+                Who We Are & What We <span class="highlight">Stand For</span>
+            </h2>
+            <p class="section-description mx-auto">
+                NayePankh Foundation is a registered NGO driven by passionate young volunteers
+                committed to building a more equitable and compassionate society. We work
+                across education, healthcare, and community empowerment.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6 reveal-on-scroll">
+                <div class="about-card">
+                    <div class="card-icon icon-primary">
+                        <i class="bi bi-book-half"></i>
+                    </div>
+                    <h4>Education</h4>
+                    <p>Providing quality education and resources to underprivileged children, helping them build a brighter future.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 reveal-on-scroll">
+                <div class="about-card">
+                    <div class="card-icon icon-blue">
+                        <i class="bi bi-heart-pulse"></i>
+                    </div>
+                    <h4>Healthcare</h4>
+                    <p>Organizing health camps, awareness drives, and providing medical support to communities in need.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 reveal-on-scroll">
+                <div class="about-card">
+                    <div class="card-icon icon-teal">
+                        <i class="bi bi-tree"></i>
+                    </div>
+                    <h4>Environment</h4>
+                    <p>Leading environmental conservation projects including tree plantation and cleanliness drives.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 reveal-on-scroll">
+                <div class="about-card">
+                    <div class="card-icon icon-green">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                    </div>
+                    <h4>Empowerment</h4>
+                    <p>Empowering women, youth, and marginalized communities through skill development programs.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- MISSION & VISION SECTION -->
+<!-- ============================================================== -->
+<section class="mission-section section-padding" id="mission">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label" style="background: rgba(233,69,96,0.15); color: var(--primary-light);">
+                <i class="bi bi-bullseye"></i> Our Purpose
+            </span>
+            <h2 class="section-title" style="color: white;">
+                Mission & <span class="highlight">Vision</span>
+            </h2>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6 reveal-on-scroll">
+                <div class="mission-card">
+                    <div class="card-icon">
+                        <i class="bi bi-rocket-takeoff"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To create a network of compassionate young volunteers who drive sustainable
+                       change in education, healthcare, and community development. We believe that
+                       every individual has the power to make a difference, and we provide the
+                       platform to channel that energy into meaningful action.</p>
+                </div>
+            </div>
+            <div class="col-lg-6 reveal-on-scroll">
+                <div class="mission-card">
+                    <div class="card-icon">
+                        <i class="bi bi-eye"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>A world where every community has access to quality education, healthcare,
+                       and opportunities for growth. We envision a future where young people lead
+                       social transformation, and no one is left behind due to circumstances of
+                       birth. Together, we build bridges of hope and opportunity.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- STATS COUNTER SECTION -->
+<!-- ============================================================== -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+                    <h3 class="stat-counter" data-target="{{ stats.total_volunteers|default:'500' }}">0+</h3>
+                    <p>Active Volunteers</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="bi bi-calendar-event-fill"></i></div>
+                    <h3 class="stat-counter" data-target="{{ stats.total_events|default:'100' }}">0+</h3>
+                    <p>Events Organized</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                    <h3 class="stat-counter" data-target="{{ stats.cities|default:'25' }}">0+</h3>
+                    <p>Cities Reached</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="bi bi-emoji-smile-fill"></i></div>
+                    <h3 class="stat-counter" data-target="10000">0+</h3>
+                    <p>Lives Impacted</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- VOLUNTEER BENEFITS SECTION -->
+<!-- ============================================================== -->
+<section class="section-padding" id="benefits">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label">
+                <i class="bi bi-stars"></i> Benefits
+            </span>
+            <h2 class="section-title">
+                Why <span class="highlight">Volunteer</span> with Us?
+            </h2>
+            <p class="section-description mx-auto">
+                Volunteering with NayePankh Foundation isn't just about giving back —
+                it's about growing as a person while making real impact.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6 reveal-on-scroll">
+                <div class="benefit-card">
+                    <div class="benefit-icon icon-primary">
+                        <i class="bi bi-award"></i>
+                    </div>
+                    <h5>Official Certificate</h5>
+                    <p>Receive a recognized volunteer certificate upon completion of your service.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 reveal-on-scroll">
+                <div class="benefit-card">
+                    <div class="benefit-icon icon-blue">
+                        <i class="bi bi-diagram-3"></i>
+                    </div>
+                    <h5>Networking</h5>
+                    <p>Connect with like-minded individuals and industry professionals.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 reveal-on-scroll">
+                <div class="benefit-card">
+                    <div class="benefit-icon icon-green">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <h5>Skill Development</h5>
+                    <p>Gain leadership, teamwork, and communication skills.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 reveal-on-scroll">
+                <div class="benefit-card">
+                    <div class="benefit-icon icon-teal">
+                        <i class="bi bi-person-badge"></i>
+                    </div>
+                    <h5>Volunteer ID Card</h5>
+                    <p>Get an official volunteer ID card for identification and access.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 reveal-on-scroll">
+                <div class="benefit-card">
+                    <div class="benefit-icon" style="background: rgba(245,197,24,0.12); color: var(--accent-gold);">
+                        <i class="bi bi-trophy"></i>
+                    </div>
+                    <h5>Letter of Recommendation</h5>
+                    <p>Top performers receive personalized recommendation letters.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 reveal-on-scroll">
+                <div class="benefit-card">
+                    <div class="benefit-icon" style="background: rgba(233,69,96,0.12); color: var(--primary);">
+                        <i class="bi bi-heart-fill"></i>
+                    </div>
+                    <h5>Make an Impact</h5>
+                    <p>Directly contribute to changing lives and building better communities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================== -->
+<!-- UPCOMING EVENTS SECTION -->
+<!-- ============================================================== -->
+{% if upcoming_events %}
+<section class="section-padding" style="background: white;" id="events">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label">
+                <i class="bi bi-calendar-event"></i> Events
+            </span>
+            <h2 class="section-title">
+                Upcoming <span class="highlight">Events</span>
+            </h2>
+        </div>
+
+        <div class="row g-4">
+            {% for event in upcoming_events %}
+            <div class="col-lg-4 col-md-6 reveal-on-scroll">
+                <div class="event-card">
+                    <div class="event-img-placeholder">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+                    <div class="card-body">
+                        <span class="event-date">
+                            <i class="bi bi-calendar3"></i> {{ event.date|date:"M d, Y" }}
+                        </span>
+                        <h5>{{ event.title }}</h5>
+                        <p class="event-location">
+                            <i class="bi bi-geo-alt"></i> {{ event.location }}
+                        </p>
+                        <a href="{% url 'events:detail' event.pk %}" class="btn btn-outline-custom btn-sm mt-2">
+                            View Details <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'events:list' %}" class="btn btn-primary-custom">
+                View All Events <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- ============================================================== -->
+<!-- CONTACT SECTION -->
+<!-- ============================================================== -->
+<section class="contact-section section-padding" id="contact">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-5">
+                <span class="section-label">
+                    <i class="bi bi-envelope"></i> Contact
+                </span>
+                <h2 class="section-title">
+                    Get In <span class="highlight">Touch</span>
+                </h2>
+                <p class="section-description">
+                    Have questions about volunteering? Want to partner with us?
+                    We'd love to hear from you. Send us a message!
+                </p>
+
+                <div class="mt-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="card-icon icon-primary me-3" style="min-width: 50px;">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Address</h6>
+                            <small class="text-muted">New Delhi, India</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="card-icon icon-blue me-3" style="min-width: 50px;">
+                            <i class="bi bi-envelope-fill"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Email</h6>
+                            <small class="text-muted">contact@nayepankh.org</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon icon-green me-3" style="min-width: 50px;">
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Phone</h6>
+                            <small class="text-muted">+91 98765 43210</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="contact-card">
+                    <form method="post" action="{% url 'core:contact' %}" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="contact-name" class="form-label">Your Name</label>
+                                {{ contact_form.name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contact-email" class="form-label">Your Email</label>
+                                {{ contact_form.email }}
+                            </div>
+                            <div class="col-12">
+                                <label for="contact-subject" class="form-label">Subject</label>
+                                {{ contact_form.subject }}
+                            </div>
+                            <div class="col-12">
+                                <label for="contact-message" class="form-label">Message</label>
+                                {{ contact_form.message }}
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary-custom">
+                                    <i class="bi bi-send me-1"></i> Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Mark Attendance{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h2 class="section-title text-center mb-4">Attendance: <span class="highlight">{{ event.title }}</span>
+                </h2>
+
+                <div class="form-card">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if assignments %}
+                        <div class="table-responsive">
+                            <table class="table table-custom">
+                                <thead>
+                                    <tr>
+                                        <th>Volunteer</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in assignments %}
+                                    <tr>
+                                        <td>{{ a.volunteer.full_name }}</td>
+                                        <td>{{ a.volunteer.user.email }}</td>
+                                        <td>
+                                            <select name="status_{{ a.volunteer.id }}"
+                                                class="form-select form-select-sm" style="width: 120px;">
+                                                <option value="present" {% if
+                                                    existing_attendance|dictsort:"0"|first==a.volunteer.id %}{% endif
+                                                    %}>Present</option>
+                                                <option value="absent">Absent</option>
+                                                <option value="late">Late</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom mt-3"><i class="bi bi-check2-all me-1"></i>
+                            Save Attendance</button>
+                        {% else %}
+                        <p class="text-center text-muted py-3">No volunteers assigned to this event yet.</p>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

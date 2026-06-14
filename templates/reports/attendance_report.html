@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Attendance Report{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="dashboard-header">
+        <div class="container"><h1><i class="bi bi-check2-square me-2"></i>Attendance Report</h1></div>
+    </div>
+    <div class="container pb-5">
+        <div class="dash-card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead><tr><th>Event</th><th>Date</th><th>Assigned</th><th>Present</th><th>Absent</th><th>Late</th><th>Rate</th></tr></thead>
+                        <tbody>
+                            {% for event in events %}
+                            <tr>
+                                <td>{{ event.title }}</td>
+                                <td>{{ event.date|date:"M d, Y" }}</td>
+                                <td>{{ event.total_assigned }}</td>
+                                <td class="text-success fw-bold">{{ event.total_present }}</td>
+                                <td class="text-danger">{{ event.total_absent }}</td>
+                                <td class="text-warning">{{ event.total_late }}</td>
+                                <td>{% if event.total_assigned > 0 %}{{ event.total_present|floatformat:0 }}%{% else %}N/A{% endif %}</td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="7" class="text-center text-muted py-3">No attendance data available.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

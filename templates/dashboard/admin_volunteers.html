@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Manage Volunteers{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="dashboard-header">
+        <div class="container">
+            <h1><i class="bi bi-people me-2"></i>Manage Volunteers</h1>
+            <p>View, search, filter, and manage all volunteer applications</p>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <!-- Search & Filter Bar -->
+        <div class="dash-card mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold">Search</label>
+                        <input type="text" class="form-control" name="search" value="{{ search_query }}" placeholder="Name, email, phone, skills...">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold">Status</label>
+                        <select class="form-select" name="status">
+                            <option value="">All Statuses</option>
+                            <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approved</option>
+                            <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-bold">City</label>
+                        <select class="form-select" name="city">
+                            <option value="">All Cities</option>
+                            {% for city in cities %}
+                            <option value="{{ city }}" {% if city_filter == city %}selected{% endif %}>{{ city }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary-custom w-100">
+                            <i class="bi bi-search me-1"></i> Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Volunteers Table -->
+        <div class="dash-card">
+            <div class="card-header-custom">
+                <h5>Volunteers ({{ page_obj.paginator.count }})</h5>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'dashboard:export_excel' %}" class="btn btn-outline-custom btn-sm">
+                        <i class="bi bi-file-spreadsheet me-1"></i> Excel
+                    </a>
+                    <a href="{% url 'dashboard:export_pdf' %}" class="btn btn-outline-custom btn-sm">
+                        <i class="bi bi-file-pdf me-1"></i> PDF
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if page_obj.object_list %}
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>City</th>
+                                <th>Status</th>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vol in page_obj %}
+                            <tr>
+                                <td class="fw-bold">{{ vol.full_name }}</td>
+                                <td>{{ vol.user.email }}</td>
+                                <td>{{ vol.phone }}</td>
+                                <td>{{ vol.city }}</td>
+                                <td><span class="badge-status badge-{{ vol.status }}">{{ vol.get_status_display }}</span></td>
+                                <td>{{ vol.volunteer_id|default:"-" }}</td>
+                                <td>{{ vol.created_at|date:"M d, Y" }}</td>
+                                <td>
+                                    <div class="d-flex gap-1">
+                                        <a href="{% url 'dashboard:admin_volunteer_detail' vol.pk %}" class="btn btn-sm btn-outline-primary" title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        {% if vol.status == 'pending' %}
+                                        <a href="{% url 'dashboard:approve_volunteer' vol.pk %}" class="btn btn-sm btn-outline-success" title="Approve">
+                                            <i class="bi bi-check-lg"></i>
+                                        </a>
+                                        <a href="{% url 'dashboard:reject_volunteer' vol.pk %}" class="btn btn-sm btn-outline-danger" title="Reject" data-confirm="Are you sure you want to reject this application?">
+                                            <i class="bi bi-x-lg"></i>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <nav class="mt-3">
+                    <ul class="pagination justify-content-center mb-0">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&status={{ status_filter }}&city={{ city_filter }}">&laquo;</a>
+                        </li>
+                        {% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}&search={{ search_query }}&status={{ status_filter }}&city={{ city_filter }}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&status={{ status_filter }}&city={{ city_filter }}">&raquo;</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+                {% else %}
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                    <p class="mt-2">No volunteers found.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

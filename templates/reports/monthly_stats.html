@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Monthly Statistics{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="dashboard-header">
+        <div class="container"><h1><i class="bi bi-graph-up-arrow me-2"></i>Monthly Statistics</h1></div>
+    </div>
+    <div class="container pb-5">
+        <!-- Current Month -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4"><div class="stats-card card-primary"><div class="stats-number">{{ current_month.registrations }}</div><div class="stats-label">This Month Registrations</div></div></div>
+            <div class="col-md-4"><div class="stats-card card-success"><div class="stats-number">{{ current_month.approvals }}</div><div class="stats-label">This Month Approvals</div></div></div>
+            <div class="col-md-4"><div class="stats-card card-info"><div class="stats-number">{{ current_month.events }}</div><div class="stats-label">This Month Events</div></div></div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="dash-card h-100">
+                    <div class="card-header-custom"><h5>Monthly Registrations</h5></div>
+                    <div class="card-body">
+                        {% for item in monthly_registrations %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>{{ item.month|date:"M Y" }}</span>
+                            <span class="badge bg-primary rounded-pill">{{ item.count }}</span>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted text-center">No data yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="dash-card h-100">
+                    <div class="card-header-custom"><h5>Monthly Events</h5></div>
+                    <div class="card-body">
+                        {% for item in monthly_events %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>{{ item.month|date:"M Y" }}</span>
+                            <span class="badge bg-info rounded-pill">{{ item.count }}</span>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted text-center">No data yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

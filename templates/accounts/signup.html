@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="auth-icon">
+                <i class="bi bi-person-plus-fill"></i>
+            </div>
+            <h2>Create Account</h2>
+            <p>Join NayePankh Foundation as a volunteer</p>
+        </div>
+
+        <form method="post" class="needs-validation" novalidate id="signup-form">
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <div class="alert alert-danger mb-3">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="row g-3">
+                <div class="col-6">
+                    <label for="signup-first-name" class="form-label">First Name</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="col-6">
+                    <label for="signup-last-name" class="form-label">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="col-12">
+                    <label for="signup-username" class="form-label">Username</label>
+                    {{ form.username }}
+                </div>
+                <div class="col-12">
+                    <label for="signup-email" class="form-label">Email Address</label>
+                    {{ form.email }}
+                </div>
+                <div class="col-12">
+                    <label for="signup-password1" class="form-label">Password</label>
+                    {{ form.password1 }}
+                </div>
+                <div class="col-12">
+                    <label for="signup-password2" class="form-label">Confirm Password</label>
+                    {{ form.password2 }}
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-auth">
+                        <i class="bi bi-person-plus me-1"></i> Create Account
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <div class="auth-footer">
+            Already have an account? <a href="{% url 'accounts:login' %}">Log In</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

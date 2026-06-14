@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Events{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="container">
+        <div class="text-center mb-4">
+            <span class="section-label"><i class="bi bi-calendar-event"></i> Events</span>
+            <h2 class="section-title">Our <span class="highlight">Events</span></h2>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="dash-card mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="search" value="{{ search_query }}" placeholder="Search events...">
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" name="status">
+                            <option value="">All</option>
+                            <option value="upcoming" {% if status_filter == 'upcoming' %}selected{% endif %}>Upcoming</option>
+                            <option value="ongoing" {% if status_filter == 'ongoing' %}selected{% endif %}>Ongoing</option>
+                            <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary-custom w-100"><i class="bi bi-search me-1"></i> Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if request.user.is_authenticated and request.user.is_staff or request.user.is_authenticated and request.user.is_admin_user %}
+        <div class="mb-3">
+            <a href="{% url 'events:create' %}" class="btn btn-primary-custom"><i class="bi bi-plus-circle me-1"></i> Create Event</a>
+        </div>
+        {% endif %}
+
+        <div class="row g-4">
+            {% for event in page_obj %}
+            <div class="col-lg-4 col-md-6">
+                <div class="event-card">
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}">
+                    {% else %}
+                        <div class="event-img-placeholder"><i class="bi bi-calendar-event"></i></div>
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="event-date"><i class="bi bi-calendar3"></i> {{ event.date|date:"M d, Y" }}</span>
+                            <span class="badge-status badge-{{ event.status }}">{{ event.get_status_display }}</span>
+                        </div>
+                        <h5>{{ event.title }}</h5>
+                        <p class="event-location"><i class="bi bi-geo-alt"></i> {{ event.location }}</p>
+                        <p class="text-muted small">{{ event.description|truncatewords:20 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted"><i class="bi bi-people me-1"></i> {{ event.assigned_count }}/{{ event.max_volunteers }}</small>
+                            <a href="{% url 'events:detail' event.pk %}" class="btn btn-outline-custom btn-sm">Details <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5 text-muted">
+                <i class="bi bi-calendar-x" style="font-size: 3rem;"></i>
+                <p class="mt-2">No events found.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&status={{ status_filter }}">&laquo;</a></li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page={{ num }}&search={{ search_query }}&status={{ status_filter }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&status={{ status_filter }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,84 @@
+# ==============================================================
+# NayePankh Foundation - Volunteer Management System
+# Requirements File
+# Generated: 2026-06-14
+# Python: 3.13.x
+# Usage: pip install -r requirements.txt
+# ==============================================================
+
+
+# --------------------------------------------------------------
+# Core Django Framework
+# --------------------------------------------------------------
+Django==6.0.3
+asgiref==3.11.1
+sqlparse==0.5.5
+
+
+# --------------------------------------------------------------
+# Database
+# --------------------------------------------------------------
+psycopg2-binary==2.9.12        # PostgreSQL adapter
+dj-database-url==3.1.2         # Parse DATABASE_URL env variable
+
+
+# --------------------------------------------------------------
+# REST API
+# --------------------------------------------------------------
+djangorestframework==3.17.1
+djangorestframework_simplejwt==5.5.1
+django-cors-headers==4.9.0
+django-filter==25.2
+PyJWT==2.12.1
+
+
+# --------------------------------------------------------------
+# Configuration & Environment
+# --------------------------------------------------------------
+python-decouple==3.8            # .env file support (config())
+python-dotenv==1.2.2            # Alternative .env loader
+
+
+# --------------------------------------------------------------
+# Image & File Handling
+# --------------------------------------------------------------
+pillow==12.2.0                  # Image processing (ImageField)
+
+
+# --------------------------------------------------------------
+# PDF Generation & Parsing
+# --------------------------------------------------------------
+reportlab==4.5.1                # PDF generation (volunteer ID cards, reports)
+pdfminer.six==20251230          # PDF text extraction
+pdfplumber==0.11.9              # High-level PDF reading
+pypdfium2==5.7.1                # PDF rendering engine
+
+
+# --------------------------------------------------------------
+# Excel / Spreadsheet Export
+# --------------------------------------------------------------
+openpyxl==3.1.5                 # Excel .xlsx read/write
+et_xmlfile==2.0.0               # openpyxl dependency
+
+
+# --------------------------------------------------------------
+# Cryptography & Security
+# --------------------------------------------------------------
+cryptography==47.0.0
+cffi==2.0.0
+pycparser==3.0
+
+
+# --------------------------------------------------------------
+# AI / Vector Search (optional features)
+# --------------------------------------------------------------
+faiss-cpu==1.13.2               # Facebook AI Similarity Search (CPU)
+numpy==2.4.4                    # Numerical computing (faiss dependency)
+
+
+# --------------------------------------------------------------
+# Utilities
+# --------------------------------------------------------------
+charset-normalizer==3.4.7       # Encoding detection
+packaging==26.2                 # Version parsing utilities
+tzdata==2025.3                  # Timezone data (for USE_TZ=True)

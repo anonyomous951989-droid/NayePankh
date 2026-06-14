@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <a href="{% url 'events:list' %}" class="text-decoration-none small mb-3 d-inline-block">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Events
+                </a>
+
+                <div class="dash-card">
+                    {% if event.image %}
+                        <img src="{{ event.image.url }}" class="w-100" style="height: 300px; object-fit: cover; border-radius: 16px 16px 0 0;" alt="{{ event.title }}">
+                    {% endif %}
+                    <div class="card-body p-4">
+                        <!-- Title & Admin Actions -->
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                            <div>
+                                <span class="badge-status badge-{{ event.status }} mb-2">{{ event.get_status_display }}</span>
+                                <h2 class="section-title mb-1">{{ event.title }}</h2>
+                            </div>
+                            {% if request.user.is_staff or request.user.is_admin_user %}
+                            <div class="d-flex gap-2 flex-wrap">
+                                <a href="{% url 'events:update' event.pk %}" class="btn btn-outline-custom btn-sm">
+                                    <i class="bi bi-pencil me-1"></i> Edit
+                                </a>
+                                <a href="{% url 'events:interest_list' event.pk %}" class="btn btn-outline-custom btn-sm">
+                                    <i class="bi bi-hand-thumbs-up me-1"></i> Interested
+                                    <span class="badge bg-danger ms-1">{{ interested_count }}</span>
+                                </a>
+                                <a href="{% url 'events:assign' event.pk %}" class="btn btn-primary-custom btn-sm">
+                                    <i class="bi bi-people me-1"></i> Assign
+                                </a>
+                                <a href="{% url 'events:attendance' event.pk %}" class="btn btn-outline-custom btn-sm">
+                                    <i class="bi bi-check2-square me-1"></i> Attendance
+                                </a>
+                                <a href="{% url 'events:delete' event.pk %}" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash me-1"></i> Delete
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Event Meta -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-3">
+                                <div class="info-label">Date</div>
+                                <div class="info-value"><i class="bi bi-calendar3 me-1"></i> {{ event.date|date:"M d, Y" }}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="info-label">Time</div>
+                                <div class="info-value"><i class="bi bi-clock me-1"></i> {{ event.start_time|time:"h:i A" }} - {{ event.end_time|time:"h:i A" }}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="info-label">Location</div>
+                                <div class="info-value"><i class="bi bi-geo-alt me-1"></i> {{ event.location }}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="info-label">Volunteers</div>
+                                <div class="info-value"><i class="bi bi-people me-1"></i> {{ event.assigned_count }} / {{ event.max_volunteers }}</div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <h5>Description</h5>
+                        <p class="text-muted">{{ event.description }}</p>
+
+                        <!-- ============================================================ -->
+                        <!-- VOLUNTEER INTEREST SECTION                                   -->
+                        <!-- ============================================================ -->
+                        {% if request.user.is_authenticated and volunteer_profile and not request.user.is_staff and not request.user.is_admin_user %}
+                        <div class="interest-section mt-4 p-4 rounded-3" style="background: linear-gradient(135deg, rgba(233,69,96,0.06), rgba(26,26,46,0.04)); border: 1.5px solid rgba(233,69,96,0.15);">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                <div>
+                                    <h6 class="mb-1 fw-bold"><i class="bi bi-hand-thumbs-up me-2" style="color:var(--primary);"></i>Volunteer for this Event</h6>
+                                    <p class="text-muted small mb-0">
+                                        {% if event.interested_count > 0 %}
+                                            <strong>{{ event.interested_count }}</strong> volunteer{{ event.interested_count|pluralize }} interested.
+                                        {% else %}
+                                            Be the first to express interest!
+                                        {% endif %}
+                                    </p>
+                                </div>
+
+                                <div class="d-flex gap-2">
+                                    {% if volunteer_profile.status != 'approved' %}
+                                        <!-- Not approved -->
+                                        <button class="btn btn-secondary btn-sm" disabled>
+                                            <i class="bi bi-lock me-1"></i> Approval Required
+                                        </button>
+
+                                    {% elif user_interest and not user_interest.is_cancelled %}
+                                        <!-- Already interested -->
+                                        <button class="btn btn-success btn-sm" disabled id="btn-interest-submitted">
+                                            <i class="bi bi-check-circle-fill me-1"></i> Interest Submitted
+                                        </button>
+                                        {% if event.is_open_for_interest %}
+                                        <form method="post" action="{% url 'events:cancel_interest' event.pk %}" class="d-inline" id="cancel-interest-form">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-outline-danger btn-sm"
+                                                    onclick="return confirm('Are you sure you want to cancel your interest?')">
+                                                <i class="bi bi-x-circle me-1"></i> Cancel Interest
+                                            </button>
+                                        </form>
+                                        {% endif %}
+
+                                    {% elif event.is_open_for_interest %}
+                                        <!-- Can express interest -->
+                                        <form method="post" action="{% url 'events:express_interest' event.pk %}" class="d-inline" id="interest-form">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary-custom btn-sm" id="btn-interested">
+                                                <i class="bi bi-hand-thumbs-up me-1"></i> I'm Interested
+                                            </button>
+                                        </form>
+
+                                    {% else %}
+                                        <!-- Not open -->
+                                        <button class="btn btn-secondary btn-sm" disabled>
+                                            <i class="bi bi-calendar-x me-1"></i> Not Open for Interest
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Admin: show interested count banner -->
+                        {% if request.user.is_staff or request.user.is_admin_user %}
+                        <div class="mt-4 p-3 rounded-3 d-flex align-items-center gap-3" style="background: linear-gradient(135deg, rgba(233,69,96,0.07), rgba(26,26,46,0.04)); border: 1.5px solid rgba(233,69,96,0.15);">
+                            <i class="bi bi-people-fill fs-3" style="color:var(--primary);"></i>
+                            <div>
+                                <div class="fw-bold">{{ interested_count }} volunteer{{ interested_count|pluralize }} interested</div>
+                                <div class="small text-muted">{{ event.assigned_count }} assigned out of {{ event.max_volunteers }} maximum</div>
+                            </div>
+                            <a href="{% url 'events:interest_list' event.pk %}" class="btn btn-primary-custom btn-sm ms-auto">
+                                <i class="bi bi-eye me-1"></i> View Interested
+                            </a>
+                        </div>
+                        {% endif %}
+
+                        <!-- Assigned Volunteers -->
+                        {% if assignments %}
+                        <h5 class="mt-4">Assigned Volunteers</h5>
+                        <div class="table-responsive">
+                            <table class="table table-custom">
+                                <thead>
+                                    <tr><th>Name</th><th>Email</th><th>Status</th></tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in assignments %}
+                                    <tr>
+                                        <td>{{ a.volunteer.full_name }}</td>
+                                        <td>{{ a.volunteer.user.email }}</td>
+                                        <td><span class="badge-status badge-{{ a.status }}">{{ a.get_status_display }}</span></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Prevent double-submit on interest form
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('interest-form');
+    const btn = document.getElementById('btn-interested');
+    if (form && btn) {
+        form.addEventListener('submit', function () {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Submitting...';
+        });
+    }
+});
+</script>
+{% endblock %}

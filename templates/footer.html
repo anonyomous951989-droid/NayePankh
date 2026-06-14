@@ -1,0 +1,101 @@
+{% load static %}
+<!-- ============================================================== -->
+<!-- FOOTER - Credit: Raj Devvanshi -->
+<!-- ============================================================== -->
+<footer class="footer-main">
+    <div class="footer-wave">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+            <path fill="currentColor" d="M0,40 C360,100 720,0 1080,60 C1260,80 1380,40 1440,40 L1440,100 L0,100 Z">
+            </path>
+        </svg>
+    </div>
+    <div class="container">
+        <div class="row g-4 py-5">
+            <!-- Column 1: About -->
+            <div class="col-lg-4 col-md-6">
+                <div class="footer-brand d-flex align-items-center mb-3">
+                    <div class="brand-icon me-2">
+                        <i class="bi bi-heart-pulse-fill"></i>
+                    </div>
+                    <span class="brand-text">
+                        <span class="brand-naye">Naye</span><span class="brand-pankh">Pankh</span>
+                    </span>
+                </div>
+                <p class="footer-desc">
+                    NayePankh Foundation is a youth-led NGO dedicated to providing education,
+                    healthcare, and essential support to underprivileged communities across India.
+                </p>
+                <div class="footer-social d-flex gap-3">
+                    <a href="#" class="social-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="social-link" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="social-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="social-link" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Column 2: Quick Links -->
+            <div class="col-lg-2 col-md-6">
+                <h5 class="footer-heading">Quick Links</h5>
+                <ul class="footer-links">
+                    <li><a href="{% url 'core:landing' %}"><i class="bi bi-chevron-right"></i> Home</a></li>
+                    <li><a href="{% url 'core:landing' %}#about"><i class="bi bi-chevron-right"></i> About Us</a></li>
+                    <li><a href="{% url 'events:list' %}"><i class="bi bi-chevron-right"></i> Events</a></li>
+                    <li><a href="{% url 'volunteers:register' %}"><i class="bi bi-chevron-right"></i> Register</a></li>
+                    <li><a href="{% url 'core:landing' %}#contact"><i class="bi bi-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Volunteer Info -->
+            <div class="col-lg-3 col-md-6">
+                <h5 class="footer-heading">For Volunteers</h5>
+                <ul class="footer-links">
+                    <li><a href="{% url 'accounts:signup' %}"><i class="bi bi-chevron-right"></i> Sign Up</a></li>
+                    <li><a href="{% url 'accounts:login' %}"><i class="bi bi-chevron-right"></i> Login</a></li>
+                    <li><a href="{% url 'dashboard:home' %}"><i class="bi bi-chevron-right"></i> Dashboard</a></li>
+                    <li><a href="{% url 'events:list' %}"><i class="bi bi-chevron-right"></i> Browse Events</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4: Contact Info -->
+            <div class="col-lg-3 col-md-6">
+                <h5 class="footer-heading">Contact Us</h5>
+                <ul class="footer-contact">
+                    <li>
+                        <i class="bi bi-geo-alt-fill text-accent"></i>
+                        <span>Jaunpur, Uttar Pradesh, India</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-envelope-fill text-accent"></i>
+                        <span>Rajdevvanshi@gmail.com</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-telephone-fill text-accent"></i>
+                        <span>+91 8465064032</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-clock-fill text-accent"></i>
+                        <span>Mon - Sat: 9:00 AM - 6:00 PM</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">
+                        &copy; 2026 NayePankh Foundation. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 footer-credit">
+                        Designed & Developed with <i class="bi bi-heart-fill text-danger"></i> by
+                        <a href="#" class="credit-link">Raj Devvanshi</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

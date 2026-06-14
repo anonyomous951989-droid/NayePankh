@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Event Report{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="dashboard-header">
+        <div class="container"><h1><i class="bi bi-calendar-event me-2"></i>Event Participation Report</h1></div>
+    </div>
+    <div class="container pb-5">
+        <div class="row g-4 mb-4">
+            <div class="col-md-4"><div class="stats-card card-primary"><div class="stats-number">{{ total_events }}</div><div class="stats-label">Total Events</div></div></div>
+            <div class="col-md-4"><div class="stats-card card-info"><div class="stats-number">{{ upcoming }}</div><div class="stats-label">Upcoming</div></div></div>
+            <div class="col-md-4"><div class="stats-card card-success"><div class="stats-number">{{ completed }}</div><div class="stats-label">Completed</div></div></div>
+        </div>
+
+        <div class="dash-card">
+            <div class="card-header-custom"><h5>All Events</h5></div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead><tr><th>Event</th><th>Date</th><th>Location</th><th>Status</th><th>Assigned</th><th>Attended</th></tr></thead>
+                        <tbody>
+                            {% for event in events %}
+                            <tr>
+                                <td>{{ event.title }}</td>
+                                <td>{{ event.date|date:"M d, Y" }}</td>
+                                <td>{{ event.location }}</td>
+                                <td><span class="badge-status badge-{{ event.status }}">{{ event.get_status_display }}</span></td>
+                                <td>{{ event.assignment_count }}</td>
+                                <td>{{ event.attendance_present }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

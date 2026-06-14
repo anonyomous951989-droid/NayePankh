@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Volunteer Report{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="dashboard-header">
+        <div class="container">
+            <h1><i class="bi bi-people me-2"></i>Volunteer Registration Report</h1>
+        </div>
+    </div>
+    <div class="container pb-5">
+        <!-- Date Filters -->
+        <div class="dash-card mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-4"><label class="form-label small fw-bold">From Date</label><input type="date" class="form-control" name="date_from" value="{{ date_from }}"></div>
+                    <div class="col-md-4"><label class="form-label small fw-bold">To Date</label><input type="date" class="form-control" name="date_to" value="{{ date_to }}"></div>
+                    <div class="col-md-4"><button type="submit" class="btn btn-primary-custom w-100"><i class="bi bi-funnel me-1"></i> Filter</button></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3"><div class="stats-card card-primary"><div class="stats-number">{{ total }}</div><div class="stats-label">Total</div></div></div>
+            <div class="col-md-3"><div class="stats-card card-success"><div class="stats-number">{{ approved }}</div><div class="stats-label">Approved</div></div></div>
+            <div class="col-md-3"><div class="stats-card card-warning"><div class="stats-number">{{ pending }}</div><div class="stats-label">Pending</div></div></div>
+            <div class="col-md-3"><div class="stats-card card-info"><div class="stats-number">{{ rejected }}</div><div class="stats-label">Rejected</div></div></div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="dash-card h-100">
+                    <div class="card-header-custom"><h5>By City (Top 10)</h5></div>
+                    <div class="card-body">
+                        {% for item in by_city %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>{{ item.city }}</span>
+                            <span class="badge bg-primary rounded-pill">{{ item.count }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="dash-card h-100">
+                    <div class="card-header-custom"><h5>By Gender</h5></div>
+                    <div class="card-body">
+                        {% for item in by_gender %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>{{ item.gender|title }}</span>
+                            <span class="badge bg-secondary rounded-pill">{{ item.count }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

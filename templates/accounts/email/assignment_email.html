@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Assignment - NayePankh Foundation</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #2d3748; }
+    .wrapper { max-width: 620px; margin: 40px auto; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.10); }
+    .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #e94560 100%); padding: 40px 36px 30px; text-align: center; }
+    .header img { width: 56px; height: 56px; border-radius: 12px; margin-bottom: 14px; }
+    .header h1 { color: #fff; font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+    .header p { color: rgba(255,255,255,0.75); font-size: 13px; margin-top: 4px; }
+    .badge { display: inline-block; background: #e94560; color: #fff; border-radius: 20px; padding: 6px 18px; font-size: 13px; font-weight: 600; margin-top: 14px; }
+    .body { padding: 36px 36px 28px; }
+    .greeting { font-size: 18px; font-weight: 600; color: #1a1a2e; margin-bottom: 12px; }
+    .intro { font-size: 15px; line-height: 1.7; color: #4a5568; margin-bottom: 24px; }
+    .event-card { background: linear-gradient(135deg, #f8fafc, #eef2ff); border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+    .event-card h2 { font-size: 17px; font-weight: 700; color: #1a1a2e; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .event-card h2::before { content: "📅"; font-size: 20px; }
+    .event-detail { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+    .event-detail .icon { font-size: 16px; min-width: 20px; }
+    .event-detail .label { font-size: 12px; color: #718096; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .event-detail .value { font-size: 14px; color: #2d3748; font-weight: 500; }
+    .highlight-box { background: linear-gradient(135deg, #fef9e7, #fff3cd); border-left: 4px solid #f6c90e; border-radius: 8px; padding: 16px 18px; margin-bottom: 24px; }
+    .highlight-box p { font-size: 14px; color: #744210; line-height: 1.6; }
+    .cta-btn { display: block; width: fit-content; margin: 0 auto 24px; background: linear-gradient(135deg, #e94560, #c2184d); color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; text-align: center; letter-spacing: 0.3px; }
+    .divider { border: none; border-top: 1px solid #e2e8f0; margin: 24px 0; }
+    .footer { background: #f7fafc; padding: 20px 36px; text-align: center; }
+    .footer p { font-size: 12px; color: #a0aec0; line-height: 1.7; }
+    .footer a { color: #e94560; text-decoration: none; }
+    .social-links { margin-top: 12px; }
+    .social-links a { display: inline-block; margin: 0 6px; color: #718096; font-size: 13px; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header -->
+    <div class="header">
+      <h1>NayePankh Foundation</h1>
+      <p>Volunteer Management System</p>
+      <span class="badge">🎉 You've Been Assigned!</span>
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+      <p class="greeting">Hello, {{ user.get_full_name|default:user.username }}!</p>
+      <p class="intro">
+        Great news! You have been <strong>officially assigned</strong> to volunteer at an upcoming event by the NayePankh Foundation admin team. Your dedication and enthusiasm have been noticed — thank you for being a part of our mission!
+      </p>
+
+      <!-- Event Details Card -->
+      <div class="event-card">
+        <h2>{{ event.title }}</h2>
+
+        <div class="event-detail">
+          <span class="icon">📆</span>
+          <div>
+            <div class="label">Date</div>
+            <div class="value">{{ event.date|date:"l, F d, Y" }}</div>
+          </div>
+        </div>
+
+        <div class="event-detail">
+          <span class="icon">⏰</span>
+          <div>
+            <div class="label">Time</div>
+            <div class="value">{{ event.start_time|time:"g:i A" }} – {{ event.end_time|time:"g:i A" }}</div>
+          </div>
+        </div>
+
+        <div class="event-detail">
+          <span class="icon">📍</span>
+          <div>
+            <div class="label">Location</div>
+            <div class="value">{{ event.location }}</div>
+          </div>
+        </div>
+
+        {% if event.description %}
+        <div class="event-detail">
+          <span class="icon">📝</span>
+          <div>
+            <div class="label">Description</div>
+            <div class="value">{{ event.description|truncatewords:30 }}</div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Reminder Box -->
+      <div class="highlight-box">
+        <p>
+          <strong>⚠️ Important Reminder:</strong> Please make sure to arrive at the venue on time.
+          If you have any questions or are unable to attend, contact the admin team as soon as possible.
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <a href="http://localhost:8000/dashboard/" class="cta-btn">View My Dashboard →</a>
+
+      <hr class="divider" />
+      <p style="font-size:14px; color:#4a5568; line-height:1.7;">
+        Thank you for your commitment to serving the community. Together, we're making a difference! 💙
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>This email was sent by <a href="#">NayePankh Foundation</a>.</p>
+      <p>If you believe this is an error, please contact <a href="mailto:admin@nayepankh.org">admin@nayepankh.org</a>.</p>
+    </div>
+  </div>
+</body>
+</html>

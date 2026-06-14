@@ -1,0 +1,211 @@
+# ==============================================================
+# NayePankh Foundation - Volunteer Management System
+# .gitignore
+# ==============================================================
+
+
+# ==============================================================
+# ENVIRONMENT & SECRETS
+# ==============================================================
+.env
+.env.*
+!.env.example
+*.env
+secrets.py
+
+
+# ==============================================================
+# PYTHON
+# ==============================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Distribution / packaging
+build/
+dist/
+eggs/
+*.egg
+*.egg-info/
+.eggs/
+MANIFEST
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+nosetests.xml
+test-results/
+
+
+# ==============================================================
+# DJANGO
+# ==============================================================
+# Local settings override
+local_settings.py
+
+# Collected static files (run collectstatic in production)
+staticfiles/
+static_root/
+
+# Media uploads (user-uploaded files — not committed)
+media/
+
+# Database (SQLite, if used locally)
+db.sqlite3
+db.sqlite3-journal
+*.db
+
+# Django migrations backup
+*.py.bak
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+
+# ==============================================================
+# VIRTUAL ENVIRONMENT
+# ==============================================================
+venv/
+.venv/
+env/
+ENV/
+venv.bak/
+.env.bak/
+
+
+# ==============================================================
+# IDE & EDITORS
+# ==============================================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*#
+.#*
+
+
+# ==============================================================
+# OPERATING SYSTEM
+# ==============================================================
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon
+
+# Linux
+*~
+
+
+# ==============================================================
+# LOGS & TEMP FILES
+# ==============================================================
+*.log
+*.pid
+*.seed
+*.pid.lock
+logs/
+log/
+tmp/
+temp/
+
+
+# ==============================================================
+# SECURITY / CERTIFICATES
+# ==============================================================
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+
+
+# ==============================================================
+# DOCKER (if added later)
+# ==============================================================
+.dockerignore
+docker-compose.override.yml
+
+
+# ==============================================================
+# NODE / FRONTEND (if added later)
+# ==============================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+
+
+# ==============================================================
+# MISC
+# ==============================================================
+*.bak
+*.orig
+*.rej
+*.patch
+.cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/

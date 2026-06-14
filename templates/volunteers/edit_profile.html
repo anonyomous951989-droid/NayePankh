@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="text-center mb-4">
+                    <h2 class="section-title">Edit <span class="highlight">Profile</span></h2>
+                </div>
+
+                <div class="form-card">
+                    <form method="post" enctype="multipart/form-data" id="edit-profile-form">
+                        {% csrf_token %}
+
+                        {% if form.errors %}
+                        <div class="alert alert-danger mb-3">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}<div>{{ error }}</div>{% endfor %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="edit-phone" class="form-label">Phone</label>
+                                {{ form.phone }}
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-address" class="form-label">Address</label>
+                                {{ form.address }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-city" class="form-label">City</label>
+                                {{ form.city }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-state" class="form-label">State</label>
+                                {{ form.state }}
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-education" class="form-label">Education</label>
+                                {{ form.education }}
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-skills" class="form-label">Skills</label>
+                                {{ form.skills }}
+                            </div>
+                            <div class="col-12">
+                                <label for="edit-interests" class="form-label">Areas of Interest</label>
+                                {{ form.interests }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-availability" class="form-label">Availability</label>
+                                {{ form.availability }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-resume" class="form-label">Resume</label>
+                                {{ form.resume }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="edit-photo" class="form-label">Photo</label>
+                                {{ form.photo }}
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary-custom">
+                                <i class="bi bi-check-circle me-1"></i> Save Changes
+                            </button>
+                            <a href="{% url 'volunteers:profile' %}" class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

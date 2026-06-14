@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% load event_filters %}
+{% block title %}Assign Volunteers — {{ event.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .volunteer-card {
+        background: var(--card-bg, #fff);
+        border: 1.5px solid rgba(233,69,96,0.10);
+        border-radius: 12px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        cursor: pointer;
+    }
+    .volunteer-card:hover {
+        border-color: rgba(233,69,96,0.4);
+        box-shadow: 0 4px 16px rgba(233,69,96,0.12);
+    }
+    .volunteer-card.selected {
+        border-color: var(--primary, #e94560);
+        background: linear-gradient(135deg, rgba(233,69,96,0.04), transparent);
+    }
+    .vol-avatar {
+        width: 44px; height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #e94560, #c2184d);
+        display: flex; align-items: center; justify-content: center;
+        color: #fff; font-weight: 700; font-size: 16px;
+        flex-shrink: 0;
+    }
+    .skill-pill {
+        display: inline-block;
+        background: rgba(233,69,96,0.10);
+        color: #c2184d;
+        border-radius: 20px;
+        padding: 2px 10px;
+        font-size: 11px;
+        font-weight: 600;
+        margin: 2px 2px 0 0;
+    }
+    .stats-bar {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        border-radius: 12px;
+        padding: 20px 24px;
+        color: #fff;
+        margin-bottom: 24px;
+    }
+    .stats-bar .stat-item { text-align: center; }
+    .stats-bar .stat-num { font-size: 28px; font-weight: 800; color: #e94560; }
+    .stats-bar .stat-label { font-size: 12px; color: rgba(255,255,255,0.7); }
+    .select-all-row {
+        background: rgba(233,69,96,0.05);
+        border-radius: 8px;
+        padding: 10px 16px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    #selection-count {
+        font-size: 13px;
+        color: #e94560;
+        font-weight: 600;
+        margin-left: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
+
+                <!-- Back -->
+                <a href="{% url 'events:detail' event.pk %}" class="text-decoration-none small mb-3 d-inline-block">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Event
+                </a>
+
+                <h2 class="section-title text-center mb-2">
+                    Assign Volunteers to <span class="highlight">{{ event.title }}</span>
+                </h2>
+                <p class="text-center text-muted mb-4">Select from volunteers who expressed interest in this event.</p>
+
+                <!-- Stats Bar -->
+                <div class="stats-bar">
+                    <div class="row g-2 text-center">
+                        <div class="col-4 stat-item">
+                            <div class="stat-num">{{ total_interested }}</div>
+                            <div class="stat-label">Interested</div>
+                        </div>
+                        <div class="col-4 stat-item">
+                            <div class="stat-num">{{ current_assignments.count }}</div>
+                            <div class="stat-label">Already Assigned</div>
+                        </div>
+                        <div class="col-4 stat-item">
+                            <div class="stat-num">{{ interested_not_assigned|length }}</div>
+                            <div class="stat-label">Available to Assign</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Currently Assigned -->
+                {% if current_assignments %}
+                <div class="dash-card mb-4">
+                    <div class="card-header-custom">
+                        <h5><i class="bi bi-check-circle-fill me-2 text-success"></i>Currently Assigned ({{ current_assignments.count }})</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-custom mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Volunteer</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Assigned On</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in current_assignments %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="vol-avatar" style="width:32px;height:32px;font-size:13px;">
+                                                    {{ a.volunteer.full_name|slice:":1" }}
+                                                </div>
+                                                {{ a.volunteer.full_name }}
+                                            </div>
+                                        </td>
+                                        <td>{{ a.volunteer.user.email }}</td>
+                                        <td>{{ a.volunteer.phone }}</td>
+                                        <td>{{ a.assigned_date|date:"M d, Y" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Interested Volunteers — Pick to Assign -->
+                <div class="form-card">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h5 class="mb-0">
+                            <i class="bi bi-hand-thumbs-up me-2" style="color:var(--primary);"></i>
+                            Interested Volunteers
+                        </h5>
+                        <a href="{% url 'events:interest_list' event.pk %}" class="btn btn-outline-custom btn-sm">
+                            <i class="bi bi-eye me-1"></i> View Full Interest List
+                        </a>
+                    </div>
+
+                    {% if interested_not_assigned %}
+                    <form method="post" id="assign-form">
+                        {% csrf_token %}
+
+                        <!-- Select All -->
+                        <div class="select-all-row">
+                            <input class="form-check-input mt-0" type="checkbox" id="selectAll">
+                            <label class="form-check-label fw-semibold" for="selectAll">Select All</label>
+                            <span id="selection-count">0 selected</span>
+                        </div>
+
+                        <!-- Volunteer Cards Grid -->
+                        <div class="row g-3 mb-4" id="volunteer-grid">
+                            {% for item in interested_not_assigned %}
+                            {% with vol=item.volunteer %}
+                            <div class="col-md-6 col-lg-4 volunteer-card-wrapper">
+                                <label class="volunteer-card p-3 d-block w-100 h-100" for="vol_{{ vol.id }}">
+                                    <div class="d-flex align-items-start gap-3">
+                                        <input class="form-check-input vol-checkbox mt-1 flex-shrink-0"
+                                               type="checkbox"
+                                               name="volunteers"
+                                               value="{{ vol.id }}"
+                                               id="vol_{{ vol.id }}">
+                                        <div class="vol-avatar">{{ vol.full_name|slice:":1" }}</div>
+                                        <div class="flex-grow-1 min-w-0">
+                                            <div class="fw-semibold" style="font-size:15px;">{{ vol.full_name }}</div>
+                                            <div class="text-muted small mb-1">
+                                                <i class="bi bi-envelope me-1"></i>{{ vol.user.email }}
+                                            </div>
+                                            <div class="text-muted small mb-2">
+                                                <i class="bi bi-telephone me-1"></i>{{ vol.phone }}
+                                            </div>
+                                            <!-- Skills -->
+                                            <div>
+                                                {% for skill in vol.skills|split:", " %}
+                                                    {% if forloop.counter <= 3 %}
+                                                    <span class="skill-pill">{{ skill|trim|truncatechars:18 }}</span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <!-- Interest date -->
+                                            <div class="text-muted mt-2" style="font-size:11px;">
+                                                <i class="bi bi-clock me-1"></i>Interested {{ item.submitted_at|timesince }} ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                            {% endwith %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-flex gap-3 align-items-center">
+                            <button type="submit" class="btn btn-primary-custom" id="assign-btn" disabled>
+                                <i class="bi bi-person-check me-1"></i>
+                                Assign <span id="assign-count">0</span> Selected Volunteer(s)
+                            </button>
+                            <a href="{% url 'events:detail' event.pk %}" class="btn btn-outline-custom">Cancel</a>
+                        </div>
+                    </form>
+
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-person-x" style="font-size: 3rem; opacity:0.4;"></i>
+                        <p class="mt-3 mb-1 fw-semibold">No interested volunteers to assign</p>
+                        <p class="small">
+                            {% if total_interested > 0 %}
+                                All {{ total_interested }} interested volunteer(s) have already been assigned.
+                            {% else %}
+                                No volunteers have expressed interest in this event yet.
+                                Set the event status to <strong>Open for Interest</strong> to allow volunteers to register their interest.
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'events:update' event.pk %}" class="btn btn-outline-custom mt-2">
+                            <i class="bi bi-pencil me-1"></i> Update Event Status
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.vol-checkbox');
+    const assignBtn = document.getElementById('assign-btn');
+    const assignCount = document.getElementById('assign-count');
+    const selectionCount = document.getElementById('selection-count');
+    const cards = document.querySelectorAll('.volunteer-card');
+
+    function updateUI() {
+        const checked = document.querySelectorAll('.vol-checkbox:checked').length;
+        assignCount.textContent = checked;
+        selectionCount.textContent = checked + ' selected';
+        assignBtn.disabled = checked === 0;
+    }
+
+    // Select-all toggle
+    if (selectAll) {
+        selectAll.addEventListener('change', function () {
+            checkboxes.forEach(cb => cb.checked = this.checked);
+            // Sync card highlight
+            document.querySelectorAll('.volunteer-card').forEach(card => {
+                card.classList.toggle('selected', this.checked);
+            });
+            updateUI();
+        });
+    }
+
+    // Per-checkbox: update card highlight and counters
+    checkboxes.forEach(function (cb) {
+        cb.addEventListener('change', function () {
+            const card = this.closest('.volunteer-card');
+            if (card) card.classList.toggle('selected', this.checked);
+            selectAll.checked = [...checkboxes].every(c => c.checked);
+            updateUI();
+        });
+    });
+
+    // Clicking anywhere on a card label also triggers the checkbox
+    // (handled natively by <label for="...">)
+    updateUI();
+
+    // Prevent double-submit
+    const form = document.getElementById('assign-form');
+    if (form) {
+        form.addEventListener('submit', function () {
+            assignBtn.disabled = true;
+            assignBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Assigning...';
+        });
+    }
+});
+</script>
+{% endblock %}

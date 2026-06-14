@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Volunteer Details{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+    <div class="dashboard-header">
+        <div class="container">
+            <a href="{% url 'dashboard:admin_volunteers' %}" class="text-light text-decoration-none small">
+                <i class="bi bi-arrow-left me-1"></i> Back to Volunteers
+            </a>
+            <h1 class="mt-2">{{ profile.full_name }}</h1>
+            <span class="badge-status badge-{{ profile.status }}">{{ profile.get_status_display }}</span>
+        </div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <!-- Personal Info -->
+                <div class="profile-info-card">
+                    <h5><i class="bi bi-person me-2 text-primary"></i>Personal Information</h5>
+                    <div class="row g-3 mt-2">
+                        <div class="col-md-6"><div class="info-label">Full Name</div><div class="info-value">{{ profile.full_name }}</div></div>
+                        <div class="col-md-6"><div class="info-label">Email</div><div class="info-value">{{ profile.user.email }}</div></div>
+                        <div class="col-md-6"><div class="info-label">Phone</div><div class="info-value">{{ profile.phone }}</div></div>
+                        <div class="col-md-6"><div class="info-label">Date of Birth</div><div class="info-value">{{ profile.date_of_birth|date:"M d, Y" }}</div></div>
+                        <div class="col-md-6"><div class="info-label">Gender</div><div class="info-value">{{ profile.get_gender_display }}</div></div>
+                        <div class="col-md-6"><div class="info-label">Volunteer ID</div><div class="info-value">{{ profile.volunteer_id|default:"Not assigned" }}</div></div>
+                    </div>
+                </div>
+
+                <!-- Address, Education, Skills -->
+                <div class="profile-info-card">
+                    <h5><i class="bi bi-geo-alt me-2 text-primary"></i>Address & Skills</h5>
+                    <div class="row g-3 mt-2">
+                        <div class="col-12"><div class="info-label">Address</div><div class="info-value">{{ profile.address }}, {{ profile.city }}, {{ profile.state }}</div></div>
+                        <div class="col-12"><div class="info-label">Education</div><div class="info-value">{{ profile.education }}</div></div>
+                        <div class="col-12"><div class="info-label">Skills</div><div class="info-value">{{ profile.skills }}</div></div>
+                        <div class="col-12"><div class="info-label">Interests</div><div class="info-value">{{ profile.interests }}</div></div>
+                        <div class="col-md-6"><div class="info-label">Availability</div><div class="info-value">{{ profile.get_availability_display }}</div></div>
+                        <div class="col-md-6"><div class="info-label">Registered On</div><div class="info-value">{{ profile.created_at|date:"M d, Y H:i" }}</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Actions -->
+            <div class="col-lg-4">
+                <div class="dash-card mb-4">
+                    <div class="card-header-custom"><h5>Actions</h5></div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            {% if profile.status == 'pending' %}
+                            <a href="{% url 'dashboard:approve_volunteer' profile.pk %}" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i> Approve
+                            </a>
+                            <form method="post" action="{% url 'dashboard:reject_volunteer' profile.pk %}">
+                                {% csrf_token %}
+                                <input type="text" name="reason" class="form-control mb-2" placeholder="Rejection reason (optional)">
+                                <button type="submit" class="btn btn-danger w-100" data-confirm="Reject this application?">
+                                    <i class="bi bi-x-circle me-1"></i> Reject
+                                </button>
+                            </form>
+                            {% elif profile.status == 'approved' %}
+                            <div class="text-center text-success">
+                                <i class="bi bi-check-circle-fill" style="font-size: 2rem;"></i>
+                                <p class="mt-1 fw-bold">Approved</p>
+                            </div>
+                            {% elif profile.status == 'rejected' %}
+                            <div class="text-center text-danger">
+                                <i class="bi bi-x-circle-fill" style="font-size: 2rem;"></i>
+                                <p class="mt-1 fw-bold">Rejected</p>
+                                {% if profile.rejection_reason %}<small class="text-muted">{{ profile.rejection_reason }}</small>{% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if profile.resume %}
+                <div class="dash-card mb-4">
+                    <div class="card-header-custom"><h5>Resume</h5></div>
+                    <div class="card-body text-center">
+                        <a href="{{ profile.resume.url }}" target="_blank" class="btn btn-outline-custom">
+                            <i class="bi bi-file-pdf me-1"></i> Download Resume
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if profile.photo %}
+                <div class="dash-card">
+                    <div class="card-header-custom"><h5>Photo</h5></div>
+                    <div class="card-body text-center">
+                        <img src="{{ profile.photo.url }}" alt="" class="rounded" style="max-width: 200px;">
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

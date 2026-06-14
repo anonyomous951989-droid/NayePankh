@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block title %}Notifications{% endblock %}
+
+{% block extra_css %}
+<style>
+    .notif-card {
+        background: var(--card-bg, #fff);
+        border-radius: 12px;
+        border: 1.5px solid rgba(0,0,0,0.06);
+        transition: all 0.2s;
+        overflow: hidden;
+    }
+    .notif-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        padding: 18px 20px;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        transition: background 0.15s;
+    }
+    .notif-row:last-child { border-bottom: none; }
+    .notif-row.unread {
+        background: linear-gradient(135deg, rgba(233,69,96,0.04), rgba(26,26,46,0.02));
+    }
+    .notif-row:hover { background: rgba(233,69,96,0.04); }
+    .notif-icon-wrap {
+        width: 48px; height: 48px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 20px; flex-shrink: 0;
+    }
+    .notif-icon-assignment { background: linear-gradient(135deg, #e94560, #c2184d); color: #fff; }
+    .notif-icon-general    { background: linear-gradient(135deg, #3b4cb8, #2d3a8c); color: #fff; }
+    .notif-icon-read       { background: rgba(108,117,125,0.12); color: #6c757d; }
+    .notif-unread-dot {
+        width: 9px; height: 9px; border-radius: 50%;
+        background: #e94560; flex-shrink: 0; margin-top: 8px;
+    }
+    .notif-title { font-weight: 600; font-size: 15px; }
+    .notif-time  { font-size: 11px; color: #9ca3af; white-space: nowrap; }
+    .notif-msg   { font-size: 13px; color: #6b7280; line-height: 1.6; margin-top: 4px; }
+    .notif-event-link { font-size: 12px; color: #e94560; font-weight: 600; margin-top: 6px; display: inline-block; }
+    .page-hero {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        border-radius: 14px;
+        padding: 28px 32px;
+        color: #fff;
+        margin-bottom: 28px;
+    }
+    .mark-all-form button {
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #fff;
+        border-radius: 8px;
+        padding: 6px 18px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .mark-all-form button:hover { background: rgba(255,255,255,0.22); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+
+                <!-- Back -->
+                <a href="{% url 'dashboard:home' %}" class="text-decoration-none small mb-3 d-inline-block">
+                    <i class="bi bi-arrow-left me-1"></i> Back to Dashboard
+                </a>
+
+                <!-- Hero -->
+                <div class="page-hero d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    <div>
+                        <h1 style="font-size:22px; font-weight:800; margin-bottom:4px;">
+                            <i class="bi bi-bell-fill me-2"></i>Notifications
+                        </h1>
+                        <p style="color:rgba(255,255,255,0.7); font-size:14px; margin:0;">
+                            All your event assignments and updates in one place.
+                        </p>
+                    </div>
+                    {% if page_obj.paginator.count > 0 %}
+                    <form method="post" action="{% url 'dashboard:mark_all_read' %}" class="mark-all-form">
+                        {% csrf_token %}
+                        <button type="submit"><i class="bi bi-check-all me-1"></i>Mark All as Read</button>
+                    </form>
+                    {% endif %}
+                </div>
+
+                <!-- Notifications List -->
+                {% if page_obj.object_list %}
+                <div class="notif-card">
+                    {% for notif in page_obj.object_list %}
+                    <div class="notif-row {% if not notif.is_read %}unread{% endif %}">
+
+                        <!-- Icon -->
+                        <div class="notif-icon-wrap {% if notif.is_read %}notif-icon-read{% elif notif.notification_type == 'assignment' %}notif-icon-assignment{% else %}notif-icon-general{% endif %}">
+                            {% if notif.notification_type == 'assignment' %}
+                                <i class="bi bi-person-check-fill"></i>
+                            {% else %}
+                                <i class="bi bi-info-circle-fill"></i>
+                            {% endif %}
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-grow-1 min-w-0">
+                            <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+                                <span class="notif-title">{{ notif.title }}</span>
+                                <span class="notif-time">{{ notif.created_at|date:"M d, Y" }} · {{ notif.created_at|timesince }} ago</span>
+                            </div>
+                            <div class="notif-msg">{{ notif.message }}</div>
+                            {% if notif.event %}
+                            <a href="{% url 'events:detail' notif.event.pk %}" class="notif-event-link">
+                                <i class="bi bi-calendar2-event me-1"></i>{{ notif.event.title }}
+                            </a>
+                            {% endif %}
+                        </div>
+
+                        <!-- Unread dot -->
+                        {% if not notif.is_read %}
+                        <div class="notif-unread-dot"></div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if page_obj.has_other_pages %}
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+                {% else %}
+                <div class="notif-card text-center py-5">
+                    <i class="bi bi-bell-slash" style="font-size:3.5rem; opacity:0.25;"></i>
+                    <h5 class="mt-3 text-muted">No notifications yet</h5>
+                    <p class="text-muted small">When you're assigned to an event or receive updates, they'll appear here.</p>
+                    <a href="{% url 'events:list' %}" class="btn btn-primary-custom mt-2">
+                        <i class="bi bi-calendar-event me-1"></i> Browse Events
+                    </a>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
