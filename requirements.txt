@@ -82,3 +82,4 @@ numpy==2.4.4                    # Numerical computing (faiss dependency)
 charset-normalizer==3.4.7       # Encoding detection
 packaging==26.2                 # Version parsing utilities
 tzdata==2025.3                  # Timezone data (for USE_TZ=True)
+gunicorn==23.0.0
